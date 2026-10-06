@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura Beauty</title>
+  
+  <!-- Google Font: Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: '#907A8C',         // Fondo principal
+              primary: '#FEECFB',    // Color principal claro
+              secondary: '#D7B7E6',  // Color secundario pastel
+              dark: '#3A2E39',       // Texto oscuro para legibilidad
+              darker: '#281E27',
+              accent: '#B890C9'
+            }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+          },
+          boxShadow: {
+            'soft': '0 8px 25px -5px rgba(0, 0, 0, 0.15)',
+            'pill': '0 4px 15px rgba(215, 183, 230, 0.4)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos personalizados y animaciones */
+    body {
+      background-color: #907A8C;
+      font-family: 'Playfair Display', serif;
+      color: #3A2E39;
+      overflow-x: hidden;
+    }
+
+    /* Animación de entrada al cargar */
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Transición suave para acordeón */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1), opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .accordion-content.active {
+      max-height: 500px;
+      opacity: 1;
+      transition: max-height 0.4s cubic-bezier(1, 0, 1, 0), opacity 0.4s ease;
+    }
+
+    /* Rotación de icono de acordeón */
+    .accordion-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .accordion-icon.rotate {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-secondary selection:text-brand-dark">
+
+  <!-- Encabezado y Navegación Hamburguesa -->
+  <header class="sticky top-0 z-50 bg-brand-bg/90 backdrop-blur-md px-6 py-4 transition-all">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <!-- Marca / Logotipo -->
+      <a href="#" class="text-2xl font-bold tracking-wide text-brand-primary hover:opacity-80 transition-opacity">
+        Aura Beauty
+      </a>
+
+      <!-- Botón Menú Hamburguesa -->
+      <button 
+        id="menuBtn" 
+        aria-label="Abrir menú" 
+        class="text-3xl text-brand-primary p-2 focus:outline-none hover:scale-110 transition-transform cursor-pointer rounded-full bg-brand-secondary/20 hover:bg-brand-secondary/40 w-12 h-12 flex items-center justify-center shadow-sm"
+      >
+        <span id="menuIcon">☰</span>
+      </button>
+    </div>
+
+    <!-- Menú Desplegable Principal -->
+    <nav 
+      id="navMenu" 
+      class="hidden max-w-4xl mx-auto mt-4 bg-brand-primary rounded-3xl p-6 shadow-soft transition-all duration-300"
+    >
+      <ul class="flex flex-col gap-3 text-center text-lg font-medium">
+        <li>
+          <a href="#presentacion" class="block py-2 px-4 rounded-full hover:bg-brand-secondary transition-colors text-brand-dark">Presentación</a>
+        </li>
+        <li>
+          <a href="#mas-info" class="block py-2 px-4 rounded-full hover:bg-brand-secondary transition-colors text-brand-dark">Más info</a>
+        </li>
+        <li>
+          <a href="#galeria" class="block py-2 px-4 rounded-full hover:bg-brand-secondary transition-colors text-brand-dark">Galería</a>
+        </li>
+        <li>
+          <a href="#contacto" class="block py-2 px-4 rounded-full hover:bg-brand-secondary transition-colors text-brand-dark">Contacto</a>
+        </li>
+        <li>
+          <a href="#redes" class="block py-2 px-4 rounded-full hover:bg-brand-secondary transition-colors text-brand-dark">Redes</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="max-w-3xl mx-auto px-4 py-8 flex-grow w-full space-y-10 fade-in-up">
+
+    <!-- Sección Hero (Foto + Título) -->
+    <section class="text-center flex flex-col items-center">
+      <!-- Foto Principal Cuadrada con Bordes Redondeados -->
+      <div class="relative group">
+        <div class="w-56 h-56 sm:w-64 sm:h-64 rounded-3xl bg-brand-primary border-4 border-brand-secondary flex items-center justify-center text-brand-dark font-semibold shadow-soft hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 overflow-hidden cursor-pointer" onclick="openLightbox('https://i.ibb.co/wZ3P2FR1/37a643-a2d1e073429c4c999bd9a6ca6cdc77fc-mv2.jpg', 'Aura Beauty Logo Principal')">
+          <img src="https://i.ibb.co/wZ3P2FR1/37a643-a2d1e073429c4c999bd9a6ca6cdc77fc-mv2.jpg" alt="Aura Beauty Logo Principal" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x600/FEECFB/3A2E39?text=Aura+Beauty+Logo';">
+        </div>
+      </div>
+
+      <!-- Título y Subtítulo -->
+      <h1 class="text-4xl sm:text-5xl font-bold text-brand-primary mt-6 tracking-wide">
+        Aura Beauty
+      </h1>
+      <p class="text-xl sm:text-2xl italic text-brand-primary/90 mt-2 font-normal max-w-lg">
+        Donde el skincare se encuentra con el makeup
+      </p>
+    </section>
+
+    <!-- Secciones Desplegables de Texto -->
+    <section class="space-y-4">
+
+      <!-- Acordeón 1: Presentación -->
+      <div id="presentacion" class="bg-brand-primary rounded-3xl shadow-soft overflow-hidden transition-all duration-300">
+        <button 
+          class="accordion-btn w-full p-6 text-left flex justify-between items-center text-xl font-bold text-brand-dark hover:bg-brand-secondary/30 transition-colors focus:outline-none"
+          aria-expanded="false"
+        >
+          <span>Presentación</span>
+          <span class="accordion-icon bg-brand-secondary text-brand-dark rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold shadow-sm">
+            ▼
+          </span>
+        </button>
+        <div class="accordion-content px-6 pb-6">
+          <div class="pt-2 border-t border-brand-secondary/40 text-lg text-brand-dark flex flex-col gap-2">
+            <p class="font-bold text-xl text-brand-darker">Makeupp & Skincare</p>
+            <p>Productos para resaltar tu belleza</p>
+            <p>Cuidado, glow y mucho amor</p>
+            <p>📍 Ubicación: CABA</p>
+            <p>💌 Pedidos por DM</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acordeón 2: Más info -->
+      <div id="mas-info" class="bg-brand-primary rounded-3xl shadow-soft overflow-hidden transition-all duration-300">
+        <button 
+          class="accordion-btn w-full p-6 text-left flex justify-between items-center text-xl font-bold text-brand-dark hover:bg-brand-secondary/30 transition-colors focus:outline-none"
+          aria-expanded="false"
+        >
+          <span>Más info</span>
+          <span class="accordion-icon bg-brand-secondary text-brand-dark rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold shadow-sm">
+            ▼
+          </span>
+        </button>
+        <div class="accordion-content px-6 pb-6">
+          <div class="pt-2 border-t border-brand-secondary/40 text-lg leading-relaxed text-brand-dark">
+            Página en la que se venda insumos de maquillaje
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Sección Galería (Grilla de 6 imágenes) -->
+    <section id="galeria" class="space-y-4 pt-4">
+      <h2 class="text-3xl font-bold text-center text-brand-primary tracking-wide">
+        Galería
+      </h2>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+        
+        <!-- Item 1 -->
+        <div class="aspect-square bg-brand-primary rounded-3xl border-2 border-brand-secondary shadow-soft overflow-hidden hover:scale-105 hover:shadow-xl transition-all duration-300 group cursor-pointer" onclick="openLightbox('https://i.ibb.co/V04LCP8r/Hyaluron-Velvet-Base-de-Maquillaje-Icono.png', 'Bases de Maquillaje Hyaluron Velvet')">
+          <img src="https://i.ibb.co/V04LCP8r/Hyaluron-Velvet-Base-de-Maquillaje-Icono.png" alt="Bases de Maquillaje Hyaluron Velvet" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='https://placehold.co/600x600/D7B7E6/3A2E39?text=Base+de+Maquillaje';">
+        </div>
+
+        <!-- Item 2 -->
+        <div class="aspect-square bg-brand-primary rounded-3xl border-2 border-brand-secondary shadow-soft overflow-hidden hover:scale-105 hover:shadow-xl transition-all duration-300 group cursor-pointer" onclick="openLightbox('https://i.ibb.co/RkdcRy3h/1-slide-1777326572716-2790071595-480c45c12b4b8721ee445bf294a81ab31777326574-480-0.jpg', 'Set de Maquillaje y Cosméticos')">
+          <img src="https://i.ibb.co/RkdcRy3h/1-slide-1777326572716-2790071595-480c45c12b4b8721ee445bf294a81ab31777326574-480-0.jpg" alt="Set de Maquillaje y Cosméticos" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='https://placehold.co/600x600/FEECFB/3A2E39?text=Maquillaje';">
+        </div>
+
+        <!-- Item 3 -->
+        <div class="aspect-square bg-brand-primary rounded-3xl border-2 border-brand-secondary shadow-soft overflow-hidden hover:scale-105 hover:shadow-xl transition-all duration-300 group cursor-pointer" onclick="openLightbox('https://i.ibb.co/v6TgJH21/8265613358319769-faefff06-06ab-4da4-b4b4-8a94685f1788.webp', 'Productos de Skincare Coreano')">
+          <img src="https://i.ibb.co/v6TgJH21/8265613358319769-faefff06-06ab-4da4-b4b4-8a94685f1788.webp" alt="Productos de Skincare Coreano" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='https://placehold.co/600x600/D7B7E6/3A2E39?text=Skincare+Coreano';">
+        </div>
+
+        <!-- Item 4 -->
+        <div class="aspect-square bg-brand-primary rounded-3xl border-2 border-brand-secondary shadow-soft overflow-hidden hover:scale-105 hover:shadow-xl transition-all duration-300 group cursor-pointer" onclick="openLightbox('https://i.ibb.co/wF1b5m7S/Copia-de-Copia-de-Bubotips-post-31-480x480.webp', 'Aplicación de Maquillaje')">
+          <img src="https://i.ibb.co/wF1b5m7S/Copia-de-Copia-de-Bubotips-post-31-480x480.webp" alt="Aplicación de Maquillaje" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='https://placehold.co/600x600/FEECFB/3A2E39?text=Maquillaje+Profesional';">
+        </div>
+
+        <!-- Item 5 -->
+        <div class="aspect-square bg-brand-primary rounded-3xl border-2 border-brand-secondary shadow-soft overflow-hidden hover:scale-105 hover:shadow-xl transition-all duration-300 group cursor-pointer" onclick="openLightbox('https://i.ibb.co/h1Cp4pfY/b446b9e385311d57c051f2208c904a05.jpg', 'Colección Skincare y Makeup Pink')">
+          <img src="https://i.ibb.co/h1Cp4pfY/b446b9e385311d57c051f2208c904a05.jpg" alt="Colección Skincare y Makeup Pink" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='https://placehold.co/600x600/D7B7E6/3A2E39?text=Coleccion+Skincare';">
+        </div>
+
+        <!-- Item 6 -->
+        <div class="aspect-square bg-brand-primary rounded-3xl border-2 border-brand-secondary shadow-soft overflow-hidden hover:scale-105 hover:shadow-xl transition-all duration-300 group cursor-pointer" onclick="openLightbox('https://i.ibb.co/DPNZW1wc/D-NQ-NP-798873-MLA107412667770-032026-O.webp', 'Set Completo Pink21')">
+          <img src="https://i.ibb.co/DPNZW1wc/D-NQ-NP-798873-MLA107412667770-032026-O.webp" alt="Set Completo Pink21" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onerror="this.onerror=null; this.src='https://placehold.co/600x600/FEECFB/3A2E39?text=Set+Pink21';">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Modal para ver imágenes ampliadas -->
+    <div id="lightbox" class="fixed inset-0 bg-brand-darker/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+      <div class="relative max-w-lg w-full bg-brand-primary rounded-3xl overflow-hidden p-3 shadow-2xl" onclick="event.stopPropagation()">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 bg-brand-secondary text-brand-dark w-10 h-10 rounded-full font-bold flex items-center justify-center text-xl hover:scale-110 transition-transform z-10 shadow-md">
+          ✕
+        </button>
+        <img id="lightboxImg" src="" alt="Imagen ampliada" class="w-full h-auto max-h-[75vh] object-contain rounded-2xl">
+        <p id="lightboxCaption" class="text-center font-semibold text-brand-dark mt-3 text-lg"></p>
+      </div>
+    </div>
+
+    <!-- Sección Contacto y Redes -->
+    <section class="space-y-6 pt-4">
+      
+      <!-- Contacto -->
+      <div id="contacto" class="bg-brand-primary rounded-3xl p-6 sm:p-8 shadow-soft text-center space-y-4">
+        <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark">Contacto</h2>
+        <p class="text-brand-dark/80 text-base sm:text-lg">
+          ¿Tenes consultas o querés hacer un pedido? ¡Escribinos!
+        </p>
+        <div>
+          <a 
+            href="mailto:brenaris1@gmail.com" 
+            class="inline-block bg-brand-secondary hover:bg-brand-accent text-brand-dark font-semibold px-8 py-3 rounded-full shadow-pill transition-all duration-300 transform hover:scale-105 text-lg"
+          >
+            ✉️ brenaris1@gmail.com
+          </a>
+        </div>
+      </div>
+
+      <!-- Redes Sociales -->
+      <div id="redes" class="bg-brand-primary rounded-3xl p-6 sm:p-8 shadow-soft text-center space-y-4">
+        <h2 class="text-2xl sm:text-3xl font-bold text-brand-dark">Redes Sociales</h2>
+        <p class="text-brand-dark/80 text-base sm:text-lg">
+          Seguinos para no perderte ninguna novedad
+        </p>
+        <div class="flex flex-wrap justify-center gap-3 pt-2">
+          
+          <a 
+            href="#" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="bg-brand-secondary hover:bg-brand-accent text-brand-dark font-semibold px-6 py-2.5 rounded-full shadow-sm transition-all duration-300 transform hover:scale-105"
+          >
+            Instagram
+          </a>
+
+          <a 
+            href="#" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="bg-brand-secondary hover:bg-brand-accent text-brand-dark font-semibold px-6 py-2.5 rounded-full shadow-sm transition-all duration-300 transform hover:scale-105"
+          >
+            TikTok
+          </a>
+
+          <a 
+            href="#" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="bg-brand-secondary hover:bg-brand-accent text-brand-dark font-semibold px-6 py-2.5 rounded-full shadow-sm transition-all duration-300 transform hover:scale-105"
+          >
+            WhatsApp
+          </a>
+
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Pie de página -->
+  <footer class="text-center py-6 text-brand-primary/80 text-sm">
+    <p>© Aura Beauty - Todos los derechos reservados</p>
+  </footer>
+
+  <!-- Lógica JavaScript (Menú Hamburguesa y Secciones Desplegables) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // --- Lógica del Menú Hamburguesa ---
+      const menuBtn = document.getElementById('menuBtn');
+      const menuIcon = document.getElementById('menuIcon');
+      const navMenu = document.getElementById('navMenu');
+      const navLinks = navMenu.querySelectorAll('a');
+
+      let isMenuOpen = false;
+
+      function toggleMenu() {
+        isMenuOpen = !isMenuOpen;
+        if (isMenuOpen) {
+          navMenu.classList.remove('hidden');
+          menuIcon.textContent = '✕';
+        } else {
+          navMenu.classList.add('hidden');
+          menuIcon.textContent = '☰';
+        }
+      }
+
+      menuBtn.addEventListener('click', toggleMenu);
+
+      // Cerrar menú al hacer clic en un enlace de navegación
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (isMenuOpen) {
+            toggleMenu();
+          }
+        });
+      });
+
+
+      // --- Lógica de Secciones Desplegables (Acordeón) ---
+      const accordionButtons = document.querySelectorAll('.accordion-btn');
+
+      accordionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const content = button.nextElementSibling;
+          const icon = button.querySelector('.accordion-icon');
+          const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+          // Toggle del acordeón clickeado
+          if (isExpanded) {
+            button.setAttribute('aria-expanded', 'false');
+            content.classList.remove('active');
+            icon.classList.remove('rotate');
+          } else {
+            button.setAttribute('aria-expanded', 'true');
+            content.classList.add('active');
+            icon.classList.add('rotate');
+          }
+        });
+      });
+
+    });
+
+    // --- Lógica del Modal / Lightbox de imágenes ---
+    function openLightbox(src, caption) {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxCaption = document.getElementById('lightboxCaption');
+      
+      lightboxImg.src = src;
+      lightboxCaption.textContent = caption;
+      lightbox.classList.remove('hidden');
+    }
+
+    function closeLightbox() {
+      const lightbox = document.getElementById('lightbox');
+      lightbox.classList.add('hidden');
+    }
+  </script>
+
+</body>
+</html>
